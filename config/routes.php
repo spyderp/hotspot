@@ -52,7 +52,7 @@ Router::scope('/', function (RouteBuilder $routes) {
     $routes->connect('/', ['controller' => 'Clients', 'action' => 'add', 'home']);
     $routes->connect('/login', ['controller' => 'Users', 'action' => 'login']);
     $routes->connect('/logout', ['controller' => 'Users', 'action' => 'logout']);
-    $routes->extensions(['xlsx']);
+    $routes->extensions(['csv', 'pdf']);
     /**
      * ...and connect the rest of 'Pages' controller's URLs.
      */

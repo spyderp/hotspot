@@ -28,4 +28,6 @@ class Register extends Entity
         '*' => true,
         'id' => false
     ];
+
+    
 }

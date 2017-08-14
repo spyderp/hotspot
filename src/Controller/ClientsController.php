@@ -65,8 +65,9 @@ class ClientsController extends AppController
 			]);
 			if($result->count()==0):
 				$client = $this->Clients->patchEntity($client, $this->request->getData());
-				if($this->Clients->save($client))
+				if($this->Clients->save($client)):
 					$this->_sendAuthorization($id, $ap, $minutes, $url);
+				endif;
 			else:
 				$result = $result->toArray();
 				if($this->request->data['cliente']==$result[0]['cliente']):
@@ -76,13 +77,15 @@ class ClientsController extends AppController
 					];
 					$register = $this->Clients->Registers->newEntity();
 					$register  = $this->Clients->Registers->patchEntity($register, $data);
-					if($this->Clients->Registers->save($register))
+					if($this->Clients->Registers->save($register)):
 						$this->_sendAuthorization($id, $ap, $minutes, $url);
+					endif;
 				else:
 					$client = $this->Clients->get($result[0]['id']);
 					$client->cliente = $this->request->data['cliente'];
-					if($this->Clients->save($client))
+					if($this->Clients->save($client)):
 						$this->_sendAuthorization($id, $ap, $minutes, $url);
+					endif;
 				endif;
 			endif;
 			$this->Flash->error(__('The client could not be saved. Please, try again.'));
@@ -100,20 +103,20 @@ class ClientsController extends AppController
 		header('Location: ' . $url);//$_SESSION['url']);
 	}
     private function _login(){
-        $unifiServer = Configure::read('unifi.unifiServer');
-		$unifiUser = Configure::read('unifi.unifiUser')
-		$unifiPass = Configure::read('unifi.unifiUser')
+      $unifiServer = Configure::read('unifi.unifiServer');
+	$unifiUser = Configure::read('unifi.unifiUser');
+	$unifiPass = Configure::read('unifi.unifiPass');
         $ch = $this->_get_curl_obj();
         curl_setopt($ch, CURLOPT_HEADER, 1);
         curl_setopt($ch, CURLOPT_REFERER,  $unifiServer.'/login');
         curl_setopt($ch, CURLOPT_URL,  $unifiServer.'/api/login');
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['username' => $unifiUser, 'password' => $unifiPass));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['username' => $unifiUser, 'password' => $unifiPass]));
         if (($content = curl_exec($ch)) === false) {
             trigger_error('cURL error: '.curl_error($ch));
         }
         curl_close ($ch);                                                 
     }
-    pricate function logout(){
+    private function logout(){
         $unifiServer = Configure::read('unifi.unifiServer');
          $ch = $this->_get_curl_obj();
          curl_setopt($ch, CURLOPT_URL, $unifiServer.'/logout');

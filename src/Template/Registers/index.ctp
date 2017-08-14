@@ -23,7 +23,8 @@
 	
 		
 <div class="text-right">
-	 <?= $this->Html->link(__('Excel'), ['controller' => 'Registers', 'action' => 'index', '_ext'=>'xlsx'], ['class'=>'btn btn-success']); ?>
+	 <?= $this->Html->link(__('Excel'), ['controller' => 'Registers', 'action' => 'export','_ext' => 'csv'], ['class'=>'btn btn-success']); ?>
+	  <?= $this->Html->link(__('PDF'), ['controller' => 'Registers', 'action' => 'pdf','_ext' => 'pdf'], ['class'=>'btn btn-success', 'target'=>'_blank']); ?>
 	 <br> <br>
 </div>
 <?= $this->Form->end() ?>
@@ -46,7 +47,7 @@
 			<td><?= h($register->client->nombre) ?></td>
 			<td><?= h($register->client->email) ?></td>
 			<td><?= h($register->client->telefono) ?></td>
-			<td><?= $register->client->cliente?'Sí':'No' ?></td>
+			<td><?= $register->client->cliente ?></td>
 			<td><?= h($register->fecha) ?></td>
 		</tr>
 		<?php endforeach; ?>

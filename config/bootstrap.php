@@ -217,8 +217,21 @@ Type::build('timestamp')
  * Only try to load DebugKit in development mode
  * Debug Kit should not be installed on a production system
  */
+//pdfconfig
+Configure::write('CakePdf', array(
+        'engine' => 'CakePdf.DomPdf',
+       'pageSize'=>'A4',
+        'orientation' => 'landscape',
+
+    ));  
+// unifi config
+Configure::write('unifiServer', [
+        'unifiServer'=>'',
+        'unifiUser'=>'',
+        'unifiPass'=>'sdfsdfsf']);
 if (Configure::read('debug')) {
     Plugin::load('DebugKit', ['bootstrap' => true]);
 }
 Plugin::load('Bootstrap');
-Plugin::load('Cewi/Excel', ['bootstrap' => true, 'routes'=>true]);
+Plugin::load('CsvView');
+Plugin::load('CakePdf', ['bootstrap' => true]);
