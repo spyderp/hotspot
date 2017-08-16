@@ -54,7 +54,7 @@ class RegistersController extends AppController
 				        'client.nombre',
 				         'client.telefono',
 				        'client.email',
-				        'client.cliente',
+				        'client.full',
 				        'fecha'
 				    ];
 		$this->viewBuilder()->className('CsvView.Csv');

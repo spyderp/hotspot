@@ -88,7 +88,6 @@ class ClientsController extends AppController
 					endif;
 				endif;
 			endif;
-			$this->Flash->error(__('The client could not be saved. Please, try again.'));
 		}
 		$this->set(compact('client'));
 		$this->set('_serialize', ['client']);

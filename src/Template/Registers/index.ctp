@@ -47,7 +47,7 @@
 			<td><?= h($register->client->nombre) ?></td>
 			<td><?= h($register->client->email) ?></td>
 			<td><?= h($register->client->telefono) ?></td>
-			<td><?= $register->client->cliente ?></td>
+			<td><?= $register->client->full ?></td>
 			<td><?= h($register->fecha) ?></td>
 		</tr>
 		<?php endforeach; ?>

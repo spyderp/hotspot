@@ -66,11 +66,6 @@ class ClientsTable extends Table
 			->requirePresence('telefono', 'create')
 			->notEmpty('telefono');
 
-		$validator
-			->boolean('cliente')
-			->requirePresence('cliente', 'create')
-			->notEmpty('cliente');
-
 		return $validator;
 	}
 

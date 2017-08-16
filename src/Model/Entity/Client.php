@@ -31,8 +31,8 @@ class Client extends Entity
         '*' => true,
         'id' => false
     ];
-     protected function _getCliente($cliente)
+     protected function _getFull()
     {
-        return $cliente?'Sí':'No';
+        return $this->_properties['cliente']?'Sí':'No';
     }
 }
