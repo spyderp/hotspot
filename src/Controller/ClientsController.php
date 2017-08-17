@@ -4,6 +4,7 @@ namespace App\Controller;
 use App\Controller\AppController;
 use Cake\Event\Event;
 use Cake\Core\Configure;
+ use UnifiApi;
 /**
  * Clients Controller
  *
@@ -103,7 +104,7 @@ class ClientsController extends AppController
 		$unifiUser = Configure::read('unifi.unifiUser');
 		$unifiPass = Configure::read('unifi.unifiPass');
 		$unifi = new UnifiApi($unifiUser,$unifiPass,$unifiServer, 'default', '5.5.20');
-		$unifi->debug = false;
+		$unifi->set_debug(false);
 		if($unifi->login()):
 			$unifi->is_loggedin();
 			if($unifi->authorize_guest($id,  $minutes)):
