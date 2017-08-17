@@ -225,10 +225,11 @@ Configure::write('CakePdf', array(
 
     ));  
 // unifi config
-Configure::write('unifiServer', [
-        'unifiServer'=>'',
-        'unifiUser'=>'',
-        'unifiPass'=>'sdfsdfsf']);
+Configure::write('unifi', [
+        'unifiServer'=>'10.106.7.33:8443',
+        'unifiUser'=>'cemadmin',
+        'unifiPass'=>'c1Rl4S2010']
+);
 if (Configure::read('debug')) {
     Plugin::load('DebugKit', ['bootstrap' => true]);
 }

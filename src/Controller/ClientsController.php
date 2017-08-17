@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\Event\Event;
+use Cake\Core\Configure;
 /**
  * Clients Controller
  *
@@ -53,8 +54,12 @@ class ClientsController extends AppController
 	 *
 	 * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
 	 */
-	public function add($id=null, $ap=null, $minutes=null, $url=null)
+	public function add()
 	{
+		$id= isset($_GET['id'])?$_GET['id']:null;
+		$ap=isset($_GET['ap'])?$_GET['ap']:null;
+		$minutes=120;
+		$url=isset($_GET['url'])?$_GET['url']:null;
 		$this->viewBuilder()->setLayout('register'); 
 		$client = $this->Clients->newEntity();
 		if ($this->request->is('post')) {
@@ -94,37 +99,25 @@ class ClientsController extends AppController
 	}
 
 	private function _sendAuthorization($id, $ap, $minutes, $url) {
-		$this->_login();
-        $this->_authorize_guest($id, $minutes);
-        $this->_logout();
-		echo "Login successful, I should redirect to: " . $url; //$_SESSION['url'];
-		sleep(8); // Small sleep to allow controller time to authorize
-		header('Location: ' . $url);//$_SESSION['url']);
+		$unifiServer = Configure::read('unifi.unifiServer');
+		$unifiUser = Configure::read('unifi.unifiUser');
+		$unifiPass = Configure::read('unifi.unifiPass');
+		$unifi = new UnifiApi($unifiUser,$unifiPass,$unifiServer, 'default', '5.5.20');
+		$unifi->debug = false;
+		if($unifi->login()):
+			$unifi->is_loggedin();
+			if($unifi->authorize_guest($id,  $minutes)):
+				$unifi->logout();
+				 return $this->redirect('http://www.google.com');
+			else:
+				$this->Flash->set('error en la autorización');
+			endif;
+		else:
+			$this->Flash->set('Error en el acceso a unifi');
+		endif;
+		
 	}
-    private function _login(){
-      $unifiServer = Configure::read('unifi.unifiServer');
-	$unifiUser = Configure::read('unifi.unifiUser');
-	$unifiPass = Configure::read('unifi.unifiPass');
-        $ch = $this->_get_curl_obj();
-        curl_setopt($ch, CURLOPT_HEADER, 1);
-        curl_setopt($ch, CURLOPT_REFERER,  $unifiServer.'/login');
-        curl_setopt($ch, CURLOPT_URL,  $unifiServer.'/api/login');
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['username' => $unifiUser, 'password' => $unifiPass]));
-        if (($content = curl_exec($ch)) === false) {
-            trigger_error('cURL error: '.curl_error($ch));
-        }
-        curl_close ($ch);                                                 
-    }
-    private function logout(){
-        $unifiServer = Configure::read('unifi.unifiServer');
-         $ch = $this->_get_curl_obj();
-         curl_setopt($ch, CURLOPT_URL, $unifiServer.'/logout');
-        if (($content = curl_exec($ch)) === false) {
-            trigger_error('cURL error: '.curl_error($ch));
-        }
-		curl_close ($ch);
-    }
-    private function _authorize_guest($mac, $minutes){
+	  private function _authorize_guest($mac, $minutes){
         $unifiServer = Configure::read('unifi.unifiServer');
         $json = ['cmd' => 'authorize-guest', 'mac' => $mac, 'minutes' => $minutes];
         $json = json_encode($json);
@@ -137,16 +130,5 @@ class ClientsController extends AppController
         }
         curl_close ($ch);
     }
-    private function  _get_curl_obj()
-    {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_COOKIESESSION, true);
-        curl_setopt($ch, CURLOPT_COOKIE, "/tmp/unifi_cookie");
-        
-        return $ch;
-    }
+    
 }

@@ -28,7 +28,10 @@
     "autoload": {
         "psr-4": {
             "App\\": "src"
-        }
+        },
+         "classmap": [
+            "vendor/artofwifi/unifiapi"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
