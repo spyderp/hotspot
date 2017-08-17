@@ -60,7 +60,13 @@ class ClientsTable extends Table
 		$validator
 			->email('email')
 			->requirePresence('email', 'create')
-			->notEmpty('email');
+			->notEmpty('email', 'sdfsfhsjfh')
+			->add('email', [
+				            'unique' => [
+				                'message'   => 'ya este correo esta en uso',
+				                'provider'  => 'table',
+				                'rule'      => 'validateUnique'
+				            ]]);
 
 		$validator
 			->requirePresence('telefono', 'create')

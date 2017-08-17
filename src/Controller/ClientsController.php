@@ -61,6 +61,7 @@ class ClientsController extends AppController
 		$ap=isset($_GET['ap'])?$_GET['ap']:null;
 		$minutes=120;
 		$url=isset($_GET['url'])?$_GET['url']:null;
+		$url = strpos($url, 'http')===false?$url:'http://'.$url;
 		$this->viewBuilder()->setLayout('register'); 
 		$client = $this->Clients->newEntity();
 		if ($this->request->is('post')) {
@@ -69,28 +70,36 @@ class ClientsController extends AppController
 				'telefono'=>$this->request->data['telefono'],
 				'email'=>$this->request->data['email'],
 			]);
-			if($result->count()==0):
-				$client = $this->Clients->patchEntity($client, $this->request->getData());
-				if($this->Clients->save($client)):
-					$this->_sendAuthorization($id, $ap, $minutes, $url);
-				endif;
-			else:
-				$result = $result->toArray();
-				if($this->request->data['cliente']==$result[0]['cliente']):
-					$data=[
-						'fecha'=>date('Y-m-d H:i:s'),
-						'client_id'=>$result[0]['id'],
-					];
-					$register = $this->Clients->Registers->newEntity();
-					$register  = $this->Clients->Registers->patchEntity($register, $data);
-					if($this->Clients->Registers->save($register)):
-						$this->_sendAuthorization($id, $ap, $minutes, $url);
+			if($this->_sendAuthorization($id, $ap, $minutes, $url)):
+				if($result->count()==0):
+					$client = $this->Clients->patchEntity($client, $this->request->getData());
+					if(!$this->Clients->save($client)):
+						$this->Flash->set('error acceso 1');
+					else:
+						return $this->redirect($url);
 					endif;
 				else:
-					$client = $this->Clients->get($result[0]['id']);
-					$client->cliente = $this->request->data['cliente'];
-					if($this->Clients->save($client)):
-						$this->_sendAuthorization($id, $ap, $minutes, $url);
+					$result = $result->toArray();
+					if($this->request->data['cliente']==$result[0]['cliente']):
+						$data=[
+							'fecha'=>date('Y-m-d H:i:s'),
+							'client_id'=>$result[0]['id'],
+						];
+						$register = $this->Clients->Registers->newEntity();
+						$register  = $this->Clients->Registers->patchEntity($register, $data);
+						if(!$this->Clients->Registers->save($register)):
+							$this->Flash->set('error acceso 2');
+						else:
+							return $this->redirect($url);
+						endif;
+					else:
+						$client = $this->Clients->get($result[0]['id']);
+						$client->cliente = $this->request->data['cliente'];
+						if(!$this->Clients->save($client)):
+							$this->Flash->set('error acceso 3');
+						else:
+							return $this->redirect($url);
+						endif;
 					endif;
 				endif;
 			endif;
@@ -106,30 +115,18 @@ class ClientsController extends AppController
 		$unifi = new UnifiApi($unifiUser,$unifiPass,$unifiServer);
 		$unifi->set_debug(false);
 		if($unifi->login()):
-			$unifi->is_loggedin();
 			if($unifi->authorize_guest($id,  $minutes)):
 				$unifi->logout();
-				 return $this->redirect('http://www.google.com');
+				 return true;
 			else:
 				$this->Flash->set('error en la autorización');
 			endif;
 		else:
 			$this->Flash->set('Error en el acceso a unifi');
 		endif;
+		return false;
 		
 	}
-	  private function _authorize_guest($mac, $minutes){
-        $unifiServer = Configure::read('unifi.unifiServer');
-        $json = ['cmd' => 'authorize-guest', 'mac' => $mac, 'minutes' => $minutes];
-        $json = json_encode($json);
-         $ch = $this->_get_curl_obj();
-        curl_setopt($ch, CURLOPT_URL, $unifiServer.'/api/s/default/cmd/stamgr');
-        curl_setopt($ch, CURLOPT_POSTFIELDS, 'json='.$json);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-        if (($content = curl_exec($ch)) === false) {
-            trigger_error('cURL error: '.curl_error($ch));
-        }
-        curl_close ($ch);
-    }
+	 
     
 }
