@@ -226,7 +226,7 @@ Configure::write('CakePdf', array(
     ));  
 // unifi config
 Configure::write('unifi', [
-        'unifiServer'=>'10.106.7.33:8443',
+        'unifiServer'=>'https://10.106.7.33:8443',
         'unifiUser'=>'cemadmin',
         'unifiPass'=>'c1Rl4S2010']
 );

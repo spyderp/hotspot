@@ -103,7 +103,7 @@ class ClientsController extends AppController
 		$unifiServer = Configure::read('unifi.unifiServer');
 		$unifiUser = Configure::read('unifi.unifiUser');
 		$unifiPass = Configure::read('unifi.unifiPass');
-		$unifi = new UnifiApi($unifiUser,$unifiPass,$unifiServer, 'default', '5.5.20');
+		$unifi = new UnifiApi($unifiUser,$unifiPass,$unifiServer);
 		$unifi->set_debug(false);
 		if($unifi->login()):
 			$unifi->is_loggedin();
