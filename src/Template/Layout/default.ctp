@@ -29,7 +29,7 @@
 		</div>
 		<div id="navbar" class="navbar-collapse collapse">
 		  <ul class="nav navbar-nav navbar-right">
-			<li><a href="/logout">Salir</a></li>
+			<li><?= $this->Html->link('Salir', ['controller'=>'users', 'action'=>'logout']) ?></li>
 		  </ul>
 		</div>
 	  </div>

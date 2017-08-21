@@ -62,6 +62,7 @@ class ClientsController extends AppController
 		$minutes=120;
 		$url=isset($_GET['url'])?$_GET['url']:null;
 		$url = strpos($url, 'http')===false?$url:'http://'.$url;
+		$url = 'http://clubdelbancodeallado.com/';
 		$this->viewBuilder()->setLayout('register'); 
 		$client = $this->Clients->newEntity();
 		if ($this->request->is('post')) {

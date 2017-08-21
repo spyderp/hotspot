@@ -13,7 +13,7 @@
     <?= $this->Html->css('style.css') ?>
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
-    <?= $this->fetch('script') ?>
+
 </head>
 <body>
     <div class="container">
@@ -23,5 +23,6 @@
         <?= $this->Flash->render() ?>
         <?= $this->fetch('content') ?>
     </div>
+    <?= $this->fetch('script') ?>
 </body>
 </html>
