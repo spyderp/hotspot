@@ -3,6 +3,7 @@
 <?= $this->Html->scriptBlock('$( function() {
     $( ".datepicker" ).datepicker({dateFormat:"yy-mm-dd"});
   } );', ['block' => true]); ?>
+  
 <h3 class="page-header"><?= __('Registro de usuario del wifi') ?></h3>
 <?= $this->Form->create(null,['id'=>'myForm']) ?>
 <div class="row">

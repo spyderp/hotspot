@@ -1,7 +1,7 @@
-<table class="table table-bordered table-striped table-hover table-responsive"  width="100%">
+<table class="table table-bordered table-striped table-hover table-responsive" border="1" cellpadding="2" cellspacing="0"  width="100%">
 	<thead>
 		<tr>
-			<th scope="col">Id ?></th>
+			<th scope="col">Id</th>
 			
 			<th scope="col">Nombre</th>
 			<th scope="col">E-mail</th>

@@ -218,11 +218,14 @@ Type::build('timestamp')
  * Debug Kit should not be installed on a production system
  */
 //pdfconfig
+
 Configure::write('CakePdf', array(
         'engine' => 'CakePdf.DomPdf',
        'pageSize'=>'A4',
         'orientation' => 'landscape',
-
+    'options' => [
+        'isRemoteEnabled' => true,
+    ],
     ));  
 // unifi config
 Configure::write('unifi', [
@@ -236,3 +239,4 @@ if (Configure::read('debug')) {
 Plugin::load('Bootstrap');
 Plugin::load('CsvView');
 Plugin::load('CakePdf', ['bootstrap' => true]);
+//DomPDF settings
