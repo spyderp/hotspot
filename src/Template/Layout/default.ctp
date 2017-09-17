@@ -25,7 +25,7 @@
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
 		  </button>
-		  <a class="navbar-brand" href="#">Bannesco::Registro de acceso WiFi de cortesia</a>
+		  <a class="navbar-brand" href="#">Banesco::Registro de acceso WiFi de cortesia</a>
 		</div>
 		<div id="navbar" class="navbar-collapse collapse">
 		  <ul class="nav navbar-nav navbar-right">

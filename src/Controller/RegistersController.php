@@ -52,9 +52,11 @@ class RegistersController extends AppController
 		$_extract = [
 				        'id',
 				        'client.nombre',
-				         'client.telefono',
+				        'client.telefono',
 				        'client.email',
-				        'client.full',
+				        function($row){
+				        	return $row['client']['cliente']?'Sí':'No';
+				        },
 				        'fecha'
 				    ];
 		$this->viewBuilder()->className('CsvView.Csv');
